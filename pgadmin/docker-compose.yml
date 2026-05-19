@@ -1,0 +1,12 @@
+---
+services:
+  pgadmin:
+    container_name: pgadmin
+    # Dockerfile: https://github.com/pgadmin-org/pgadmin4/blob/master/Dockerfile
+    image: docker.io/dpage/pgadmin4:latest
+    user: 5050:65533
+    env_file: [.env]
+    # environment: {}
+    ports: [8083:80/tcp]
+    # volumes: []
+    restart: no
