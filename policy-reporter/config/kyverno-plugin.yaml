@@ -1,0 +1,22 @@
+leaderElection:
+  enabled: false
+  releaseOnCancel: true
+  leaseDuration: 15
+  renewDeadline: 10
+  retryPeriod: 2
+  lockName: kyverno-plugin
+
+logging:
+  api: false
+  server: false
+  encoding: console
+  logLevel: 0
+
+server:
+  basicAuth:
+    username: ""
+    password: ""
+    secretRef: ""
+
+core:
+  host: http://policy-reporter:8080

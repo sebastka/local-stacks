@@ -1,0 +1,49 @@
+target:
+  loki:
+    # Adapt this URL: use http://host.docker.internal:3100 if Loki runs on the host
+    host: http://loki.loki:3100  # Change this to the external URL of your Loki instance
+    skipExistingOnStartup: true
+
+worker: 5
+
+metrics:
+  enabled: true
+  mode: detailed
+
+sourceFilters:
+  - selector:
+      sources: [kyverno, KyvernoValidatingPolicy, KyvernoImageValidatingPolicy]
+    uncontrolledOnly: true
+    disableClusterReports: false
+    kinds:
+      exclude: [ReplicaSet]
+
+leaderElection:
+  enabled: false
+  releaseOnCancel: true
+  leaseDuration: 15
+  renewDeadline: 10
+  retryPeriod: 2
+
+logging:
+  server: false
+  encoding: console
+  logLevel: 0
+
+api:
+  basicAuth:
+    username: ""
+    password: ""
+    secretRef: ""
+
+database:
+  type: ""
+  dsn: ""
+  maxOpenConnections: 25
+  maxIdleConnections: 25
+  connectionMaxIdleTime: 0
+  connectionMaxLifetime: 0
+  timeout: 10
+  metrics: false
+  secretRef: ""
+  mountedSecret: ""

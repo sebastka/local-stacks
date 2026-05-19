@@ -1,0 +1,46 @@
+logging:
+  api: false
+  server: false
+  encoding: console
+  logLevel: 0
+
+server:
+  port: 8080
+  cors: true
+  overwriteHost: true
+  sessions:
+    storage: filesystem
+    tempDir: /tmp
+
+ui:
+  displayMode: ""
+  banner: ""
+  logo:
+    path: ""
+    disabled: false
+
+crds:
+  customBoard: false
+
+clusters:
+  - name: Default
+    host: http://policy-reporter:8080
+    plugins:
+      - name: kyverno
+        host: http://policy-reporter-kyverno-plugin:8080
+
+sources:
+  - name: kyverno
+    type: result
+    exceptions: false
+    excludes:
+      results:
+        - warn
+        - error
+  - name: KyvernoValidatingPolicy
+    type: result
+    exceptions: false
+    excludes:
+      results:
+        - warn
+        - error

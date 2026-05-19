@@ -1,0 +1,58 @@
+---
+services:
+  policy-reporter:
+    container_name: policy-reporter
+    image: ghcr.io/kyverno/policy-reporter:3.7.4
+    user: 1000:1000
+    command:
+      - --port=8080
+      - --config=/app/config.yaml
+      - --dbfile=/sqlite/database.db
+      - --metrics-enabled=true
+      - --rest-enabled=true
+      - --profile=false
+      - --lease-name=policy-reporter
+      - --template-dir=/app/templates
+      - --kubeconfig=/kubeconfig
+    env_file: [policy-reporter.env]
+    # environment: {}
+    # ports: []
+    # extra_hosts: [host.docker.internal:host-gateway]  # if k8s API server is on the host
+    volumes:
+      - ./config/core.yaml:/app/config.yaml:ro
+      - ./persist/sqlite:/sqlite
+      - ./kube/config:/kubeconfig:ro
+    restart: unless-stopped
+
+  policy-reporter-kyverno-plugin:
+    container_name: policy-reporter-kyverno-plugin
+    depends_on: [policy-reporter]
+    image: ghcr.io/kyverno/policy-reporter/kyverno-plugin:0.6.0
+    user: 1000:1000
+    command:
+      - run
+      - --config=/app/config.yaml
+      - --port=8080
+      - --local
+    env_file: [policy-reporter.env]
+    # environment: {}
+    # ports: []
+    volumes:
+      - ./config/kyverno-plugin.yaml:/app/config.yaml:ro
+      - ./kube/config:/kubeconfig:ro
+    restart: unless-stopped
+
+  policy-reporter-ui:
+    container_name: policy-reporter-ui
+    depends_on: [policy-reporter, policy-reporter-kyverno-plugin]
+    image: ghcr.io/kyverno/policy-reporter-ui:2.5.1
+    user: 1000:1000
+    command:
+      - run
+      - --config=/app/config.yaml
+      - --port=8080
+    env_file: [policy-reporter.env]
+    # environment: {}
+    ports: [8085:8080/tcp]
+    volumes: [./config/ui.yaml:/app/config.yaml:ro]
+    restart: unless-stopped
