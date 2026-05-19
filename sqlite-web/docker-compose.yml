@@ -7,7 +7,7 @@ services:
     image: sqliteweb:latest  # ghcr.io/coleifer/sqlite-web:latest has no arm64
     entrypoint: [sh, -c, 'sqlite_wsgi -H 0.0.0.0 -r "$$SQLITE_DATABASE"']
     user: 1000:1000
-    # env_file: [.env]
+    # env_file: []
     environment:
       SQLITE_DATABASE: /mnt/data/XXX.sqlite3
     ports: [8081:8080/tcp]
