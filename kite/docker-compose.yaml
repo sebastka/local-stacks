@@ -1,45 +1,16 @@
 ---
 services:
-  kite-config:
-    container_name: kite-config
-    image: alpine:latest
-    user: 1000:2000
-    entrypoint: [sh, -c]
-    command:
-      - |
-        {
-          printf -- '---\n'
-          printf -- 'superUser:\n'
-          printf -- '  username: %s\n' "$$KITE_SUPER_USER"
-          printf -- '  password: %s\n' "$$KITE_SUPER_PASSWORD"
-          printf -- '\n'
-          printf -- 'clusters:\n'
-          printf -- '  - name: %s\n'        "$$KITE_CLUSTER_NAME"
-          printf -- '    description: %s\n' "$$KITE_CLUSTER_DESCRIPTION"
-          printf -- '    prometheusURL: %s\n' "$$KITE_PROMETHEUS_URL"
-          printf -- '    config: |\n'
-          sed 's/^/      /' /mnt/kubeconfig.yaml
-        } >/data/kite-config.yaml
-    env_file: [.env]
-    # environment: {}
-    # ports: []
-    volumes:
-      - /.kube/config:/mnt/kubeconfig.yaml:ro
-      - ./data/kite-config.yaml:/data/kite-config.yaml
-    restart: no
-
   kite:
     container_name: kite
-    depends_on: {kite-config: {condition: service_completed_successfully}}
     # Dockerfile: https://github.com/kite-org/kite/blob/main/Dockerfile
     image: ghcr.io/kite-org/kite:latest
     user: 1000:2000
     env_file: [.env]
     environment:
       DB_DSN: /data/db.sqlite
-      KITE_CONFIG_FILE: /data/kite-config.yaml
+      KITE_CONFIG_FILE: /config/kite-config.yaml
     ports: [8080:8080/tcp]
     volumes:
-      - ./data/kite-config.yaml:/data/kite-config.yaml:ro
-      - ./data/db.sqlite:/data/db.sqlite
+      - ./persist/kite-config.yaml:/config/kite-config.yaml:ro
+      - ./persist/data:/data
     restart: no

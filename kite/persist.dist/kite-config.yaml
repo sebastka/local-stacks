@@ -1,0 +1,17 @@
+# This file needs to be updated with the actual configuration values.
+---
+superUser:
+  username: admin
+  password: XXX
+
+clusters:
+  - name:
+    description:
+    prometheusURL:
+    config: |
+      apiVersion: v1
+      kind: Config
+      current-context: ''
+      clusters: []
+      contexts: []
+      users: []
