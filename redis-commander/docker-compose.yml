@@ -1,0 +1,13 @@
+---
+services:
+  rediscommander:
+    container_name: rediscommander
+    # https://github.com/joeferner/redis-commander/blob/master/Dockerfile
+    image: ghcr.io/joeferner/redis-commander:latest
+    user: redis:10000
+    env_file: [.env]
+    # environment: {}
+    ports:
+      - 8081:8081/tcp
+    # volumes: []
+    restart: no
