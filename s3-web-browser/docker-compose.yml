@@ -1,0 +1,16 @@
+---
+services:
+  s3webbrowser:
+    container_name: s3webbrowser
+    # Dockerfile: https://github.com/romanzdk/s3-web-browser/blob/main/Dockerfile
+    build: {context: https://github.com/romanzdk/s3-web-browser.git}
+    image: s3webbrowser:latest
+    command: [gunicorn, --bind, "0.0.0.0:8000", run:app]
+    # user: 65534:65534
+    env_file: [.env]
+    # environment:
+    #    DEBUG:
+    #    PAGE_ITEMS:
+    ports: [8000:8000/tcp]
+    # volumes: []
+    restart: no
