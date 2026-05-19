@@ -1,0 +1,12 @@
+---
+services:
+  trivy-operator-dashboard:
+    container_name: trivy-operator-dashboard
+    # Dockerfile: https://github.com/raoulx24/trivy-operator-dashboard/blob/master/build/dockerfile
+    image: ghcr.io/raoulx24/trivy-operator-dashboard:latest
+    user: 1000:1000
+    env_file: [trivy-operator-dashboard.env]
+    # environment: {}
+    ports: [8900:8900]
+    volumes: [./kube/config:/kubeconfig/config:ro]
+    restart: no
