@@ -2,6 +2,7 @@
 services:
   sqliteweb:
     container_name: sqliteweb
+    # Dockerfile: https://github.com/coleifer/sqlite-web/blob/master/docker/Dockerfile
     build: {context: https://github.com/coleifer/sqlite-web.git#master:docker}
     image: sqliteweb:latest  # ghcr.io/coleifer/sqlite-web:latest has no arm64
     entrypoint: [sh, -c, 'sqlite_wsgi -H 0.0.0.0 -r "$$SQLITE_DATABASE"']
