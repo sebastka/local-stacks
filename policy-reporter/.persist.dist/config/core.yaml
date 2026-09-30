@@ -1,7 +1,7 @@
 target:
   loki:
     # Adapt this URL: use http://host.docker.internal:3100 if Loki runs on the host
-    host: http://loki.loki:3100  # Change this to the external URL of your Loki instance
+    host: my-loki:3100
     skipExistingOnStartup: true
 
 worker: 5

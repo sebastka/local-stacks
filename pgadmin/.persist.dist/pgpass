@@ -1,0 +1,5 @@
+# hostname:port:database:username:password
+# ':' and '\' in a password have to be backslash escaped.
+# Keep this file group readable (640) for the container's gid, not world readable.
+db01.host.tld:5432:*:postgres:abc123
+db02.host.tld:5432:*:postgres:abc123

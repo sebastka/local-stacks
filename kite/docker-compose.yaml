@@ -5,12 +5,7 @@ services:
     # Dockerfile: https://github.com/kite-org/kite/blob/main/Dockerfile
     image: ghcr.io/kite-org/kite:latest
     user: 1000:2000
-    env_file: [.env]
-    environment:
-      DB_DSN: /data/db.sqlite
-      KITE_CONFIG_FILE: /config/kite-config.yaml
+    env_file: [kite.env, ./.persist/secrets.env]
     ports: [8080:8080/tcp]
-    volumes:
-      - ./persist/kite-config.yaml:/config/kite-config.yaml:ro
-      - ./persist/data:/data
+    volumes: [./.persist/kite-config.yaml:/config/kite-config.yaml:ro, ./.persist/data:/data]
     restart: no

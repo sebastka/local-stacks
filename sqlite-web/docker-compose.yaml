@@ -8,8 +8,7 @@ services:
     entrypoint: [sh, -c, 'sqlite_wsgi -H 0.0.0.0 -r "$$SQLITE_DATABASE"']
     user: 1000:1000
     # env_file: []
-    environment:
-      SQLITE_DATABASE: /mnt/data/XXX.sqlite3
+    environment: [SQLITE_DATABASE=/mnt/data/db.sqlite]
     ports: [8081:8080/tcp]
     volumes: [./data:/mnt/data:ro]
     restart: no

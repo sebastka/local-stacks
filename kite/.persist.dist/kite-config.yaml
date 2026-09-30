@@ -13,5 +13,5 @@ clusters:
       kind: Config
       current-context: ''
       clusters: []
-      contexts: []
       users: []
+      contexts: []

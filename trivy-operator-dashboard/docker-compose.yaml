@@ -8,5 +8,5 @@ services:
     env_file: [trivy-operator-dashboard.env]
     # environment: {}
     ports: [8900:8900]
-    volumes: [./kube/config:/kubeconfig/config:ro]
+    volumes: [./.kubeconfig.yaml:/kubeconfig/config:ro]
     restart: no

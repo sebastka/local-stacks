@@ -6,8 +6,7 @@ services:
     image: docker.io/otwld/velero-ui:latest
     # user: 1000:1000
     # env_file: []
-    environment:
-      KUBE_CONFIG_PATH: /app/.kube/config
+    environment: [KUBE_CONFIG_PATH=/app/.kube/config]
     ports: [3000:3000/tcp]
-    volumes: [./kube/config:/app/.kube/config:ro]
+    volumes: [./.kubeconfig.yaml:/app/.kube/config:ro]
     restart: no
