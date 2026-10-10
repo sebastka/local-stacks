@@ -12,6 +12,9 @@ bin/gen-configs    # kubeconfigs, kite, pgadmin, pma, ch-ui, *.dist copies
 bin/forward        # only if gen-configs says so; keep it running
 ```
 
+`bin/argocd-ui` runs Argo CD's UI locally against the cluster (core mode), on
+http://localhost:8086.
+
 Everything comes from your kubeconfig as kubectl finds it: `$KUBECONFIG`,
 else `~/.kube/config`. Set `KUBECONFIG` in `.env` (or `.envrc`) to use another.
 

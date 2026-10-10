@@ -4,7 +4,7 @@ services:
     container_name: pma
     image: docker.io/library/phpmyadmin:latest
     # user: 0:0
-    env_file: [pma.env, .env]
+    env_file: [pma.env, {path: .env, required: false}]  # .env: bin/gen-configs, if it finds any mysql
     ports: [40123:80/tcp]
     extra_hosts: [host.docker.internal:host-gateway]  # mysql on the host machine, or through bin/forward
     volumes: [./config.user.inc.php:/etc/phpmyadmin/config.user.inc.php:ro]  # a login per server

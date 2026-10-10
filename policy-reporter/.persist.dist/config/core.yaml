@@ -1,7 +1,9 @@
 target:
   loki:
-    # Adapt this URL: use http://host.docker.internal:3100 if Loki runs on the host
-    host: my-loki:3100
+    # bin/gen-configs sets config.host and config.path to the Loki or
+    # VictoriaLogs of the watched cluster, if it finds one.
+    config:
+      host: http://my-loki:3100
     skipExistingOnStartup: true
 
 worker: 5

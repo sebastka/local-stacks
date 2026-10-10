@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+#
+# Argo CD's UI, run here rather than in the cluster: `argocd admin dashboard`
+# serves the API server and UI locally, reaching the in-cluster repo-server
+# and Redis through the Kubernetes API, as your kubeconfig user. No Argo CD
+# login or RBAC: you can do what that user can.
+#
+# It runs on the host, not in a container, so that your kubeconfig's exec
+# plugins (OIDC, doctl) keep refreshing its credentials.
+#
+# Usage: bin/argocd-ui [argocd admin dashboard flags...]
+#
+# Settings (.env, see .env.dist): ARGOCD_CONTEXT, ARGOCD_NAMESPACE, ARGOCD_PORT.
+
+set -euo pipefail
+
+cd "$(dirname "$(readlink -f "$0")")/.."
+
+# Settings from .env, over the environment, as in bin/gen-configs.
+if [[ -f .env ]]; then
+    set -a
+    # shellcheck source=/dev/null
+    . ./.env
+    set +a
+fi
+ARGOCD_CONTEXT=${ARGOCD_CONTEXT:-$(kubectl config current-context)}
+ARGOCD_NAMESPACE=${ARGOCD_NAMESPACE:-argocd}
+ARGOCD_PORT=${ARGOCD_PORT:-8086}
+
+echo "Argo CD in $ARGOCD_CONTEXT/$ARGOCD_NAMESPACE: http://localhost:$ARGOCD_PORT"
+exec argocd admin dashboard --context "$ARGOCD_CONTEXT" -n "$ARGOCD_NAMESPACE" \
+    --address 127.0.0.1 --port "$ARGOCD_PORT" "$@"
