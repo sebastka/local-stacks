@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+#
+# Any in-cluster web UI behind a Service, on localhost, for those without a
+# wrapper of their own: Grafana, Headlamp...
+#
+# Usage: bin/svc-ui <namespace> <service> [<service port> [<context>]]
+#   e.g. bin/svc-ui grafana grafana-service
+#
+# The service port defaults to the Service's first one.
+#
+# Settings (.env, see .env.dist): DASHBOARD_CONTEXT, SVC_UI_PORT.
+
+# shellcheck source=lib/dashboard.sh
+. "$(dirname "$(readlink -f "$0")")/lib/dashboard.sh"
+
+if (( $# < 2 )); then
+    echo "usage: bin/svc-ui <namespace> <service> [<service port> [<context>]]" >&2
+    exit 2
+fi
+context=$(dashboard_context "${4:-}")
+port=${3:-$(kubectl --context "$context" -n "$1" get svc "$2" -o jsonpath='{.spec.ports[0].port}')}
+
+dashboard "$1/$2" "$context" "$1" "svc/$2" "${SVC_UI_PORT:-8089}" "$port"

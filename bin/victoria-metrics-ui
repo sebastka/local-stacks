@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+#
+# VictoriaMetrics' vmui on localhost, to query the metrics (MetricsQL). Its
+# Service: vmsingle-*, from the operator or victoria-metrics-k8s-stack.
+#
+# Usage: bin/victoria-metrics-ui [<context>]
+#
+# Settings (.env, see .env.dist): DASHBOARD_CONTEXT, VICTORIA_METRICS_UI_PORT.
+
+# shellcheck source=lib/dashboard.sh
+. "$(dirname "$(readlink -f "$0")")/lib/dashboard.sh"
+
+dashboard_find "VictoriaMetrics" \
+    "$(dashboard_context "${1:-}")" '^vmsingle-' "${VICTORIA_METRICS_UI_PORT:-8091}" /vmui/

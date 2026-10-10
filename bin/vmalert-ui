@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+#
+# vmalert on localhost: the alerting and recording rules, and their state. Its
+# Service: vmalert-*.
+#
+# Usage: bin/vmalert-ui [<context>]
+#
+# Settings (.env, see .env.dist): DASHBOARD_CONTEXT, VMALERT_UI_PORT.
+
+# shellcheck source=lib/dashboard.sh
+. "$(dirname "$(readlink -f "$0")")/lib/dashboard.sh"
+
+dashboard_find "vmalert" \
+    "$(dashboard_context "${1:-}")" '^vmalert-' "${VMALERT_UI_PORT:-8092}" /

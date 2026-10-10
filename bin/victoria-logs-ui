@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+#
+# VictoriaLogs' vmui on localhost, to query the logs (LogsQL). Its Service:
+# victoria-logs-* from the Helm chart, or vlsingle-* from the operator.
+#
+# Usage: bin/victoria-logs-ui [<context>]
+#
+# Settings (.env, see .env.dist): DASHBOARD_CONTEXT, VICTORIA_LOGS_UI_PORT.
+
+# shellcheck source=lib/dashboard.sh
+. "$(dirname "$(readlink -f "$0")")/lib/dashboard.sh"
+
+dashboard_find "VictoriaLogs" \
+    "$(dashboard_context "${1:-}")" '^(victoria-logs|vlsingle-)' "${VICTORIA_LOGS_UI_PORT:-8090}" /select/vmui/

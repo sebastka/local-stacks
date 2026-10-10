@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+#
+# Longhorn's UI on localhost: volumes, replicas, nodes and backups. Its
+# Service: longhorn-frontend.
+#
+# Usage: bin/longhorn-ui [<context>]
+#
+# Settings (.env, see .env.dist): DASHBOARD_CONTEXT, LONGHORN_UI_PORT.
+
+# shellcheck source=lib/dashboard.sh
+. "$(dirname "$(readlink -f "$0")")/lib/dashboard.sh"
+
+dashboard_find "Longhorn" \
+    "$(dashboard_context "${1:-}")" '^longhorn-frontend$' "${LONGHORN_UI_PORT:-8094}" /

@@ -10,23 +10,16 @@
 #
 # Usage: bin/argocd-ui [argocd admin dashboard flags...]
 #
-# Settings (.env, see .env.dist): ARGOCD_CONTEXT, ARGOCD_NAMESPACE, ARGOCD_PORT.
+# Settings (.env, see .env.dist): ARGOCD_CONTEXT (else DASHBOARD_CONTEXT),
+# ARGOCD_NAMESPACE, ARGOCD_PORT.
 
-set -euo pipefail
+# shellcheck source=lib/dashboard.sh
+. "$(dirname "$(readlink -f "$0")")/lib/dashboard.sh"
 
-cd "$(dirname "$(readlink -f "$0")")/.."
+context=$(dashboard_context "${ARGOCD_CONTEXT:-}")
+namespace=${ARGOCD_NAMESPACE:-argocd}
+port=${ARGOCD_PORT:-8086}
 
-# Settings from .env, over the environment, as in bin/gen-configs.
-if [[ -f .env ]]; then
-    set -a
-    # shellcheck source=/dev/null
-    . ./.env
-    set +a
-fi
-ARGOCD_CONTEXT=${ARGOCD_CONTEXT:-$(kubectl config current-context)}
-ARGOCD_NAMESPACE=${ARGOCD_NAMESPACE:-argocd}
-ARGOCD_PORT=${ARGOCD_PORT:-8086}
-
-echo "Argo CD in $ARGOCD_CONTEXT/$ARGOCD_NAMESPACE: http://localhost:$ARGOCD_PORT"
-exec argocd admin dashboard --context "$ARGOCD_CONTEXT" -n "$ARGOCD_NAMESPACE" \
-    --address 127.0.0.1 --port "$ARGOCD_PORT" "$@"
+echo "Argo CD in $context/$namespace: http://localhost:$port/"
+exec argocd admin dashboard --context "$context" -n "$namespace" \
+    --address 127.0.0.1 --port "$port" "$@"

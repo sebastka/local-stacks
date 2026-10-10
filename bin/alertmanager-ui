@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+#
+# Alertmanager on localhost: the alerts firing, and their silences. Its
+# Service: vmalertmanager-* from the operator, or alertmanager*.
+#
+# Usage: bin/alertmanager-ui [<context>]
+#
+# Settings (.env, see .env.dist): DASHBOARD_CONTEXT, ALERTMANAGER_UI_PORT.
+
+# shellcheck source=lib/dashboard.sh
+. "$(dirname "$(readlink -f "$0")")/lib/dashboard.sh"
+
+dashboard_find "Alertmanager" \
+    "$(dashboard_context "${1:-}")" '^(vmalertmanager-|alertmanager)' "${ALERTMANAGER_UI_PORT:-8093}" /

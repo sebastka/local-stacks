@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+#
+# Envoy Gateway's admin console: the controller's config, server info and
+# config dump, on localhost. Its own admin listener (19000) is not exposed by
+# any Service, so this forwards to the deployment.
+#
+# Usage: bin/envoy-gateway-ui [<context>]
+#
+# Settings (.env, see .env.dist): DASHBOARD_CONTEXT, ENVOY_GATEWAY_NAMESPACE,
+# ENVOY_GATEWAY_UI_PORT.
+
+# shellcheck source=lib/dashboard.sh
+. "$(dirname "$(readlink -f "$0")")/lib/dashboard.sh"
+
+dashboard "Envoy Gateway admin" "$(dashboard_context "${1:-}")" \
+    "${ENVOY_GATEWAY_NAMESPACE:-envoy-gateway-system}" deploy/envoy-gateway \
+    "${ENVOY_GATEWAY_UI_PORT:-8087}" 19000

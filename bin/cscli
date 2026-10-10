@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+#
+# cscli, run in the cluster's CrowdSec LAPI pod: for what CrowdSec has no UI
+# for, e.g. bin/cscli decisions list, bin/cscli alerts list.
+#
+# Usage: bin/cscli <cscli arguments...>
+#
+# Settings (.env, see .env.dist): CROWDSEC_CONTEXT (else DASHBOARD_CONTEXT),
+# CROWDSEC_NAMESPACE.
+
+# shellcheck source=lib/dashboard.sh
+. "$(dirname "$(readlink -f "$0")")/lib/dashboard.sh"
+
+context=$(dashboard_context "${CROWDSEC_CONTEXT:-}")
+namespace=${CROWDSEC_NAMESPACE:-crowdsec}
+
+# The CrowdSec chart labels its LAPI pods type=lapi, whatever the release.
+pod=$(kubectl --context "$context" -n "$namespace" get pods -l type=lapi \
+    --field-selector=status.phase=Running -o name | head -n1)
+if [[ -z $pod ]]; then
+    echo "no running CrowdSec LAPI pod (label type=lapi) in $context/$namespace" >&2
+    exit 1
+fi
+
+# A terminal for cscli's tables and prompts, when there is one.
+tty=()
+[[ -t 0 ]] && tty+=(-i)
+[[ -t 1 ]] && tty+=(-t)
+
+exec kubectl --context "$context" -n "$namespace" exec "${tty[@]}" "$pod" -- cscli "$@"

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+#
+# Hubble UI, Cilium's network flow and service map, on localhost: what
+# `cilium hubble ui` does, minus the browser it opens.
+#
+# Usage: bin/hubble-ui [<context>]
+#
+# Settings (.env, see .env.dist): DASHBOARD_CONTEXT, CILIUM_NAMESPACE,
+# HUBBLE_UI_PORT.
+
+# shellcheck source=lib/dashboard.sh
+. "$(dirname "$(readlink -f "$0")")/lib/dashboard.sh"
+
+dashboard "Hubble UI" "$(dashboard_context "${1:-}")" \
+    "${CILIUM_NAMESPACE:-kube-system}" svc/hubble-ui "${HUBBLE_UI_PORT:-8088}" 80
