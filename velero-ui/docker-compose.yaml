@@ -8,5 +8,5 @@ services:
     # env_file: []
     environment: [KUBE_CONFIG_PATH=/app/.kube/config]
     ports: [3000:3000/tcp]
-    volumes: [./.kubeconfig.yaml:/app/.kube/config:ro]
+    volumes: [../.kubeconfig.gen.yaml:/app/.kube/config:ro]
     restart: no

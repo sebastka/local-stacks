@@ -2,3 +2,5 @@
 !.gitignore
 !.*.dist
 charts
+!.envrc
+!.github

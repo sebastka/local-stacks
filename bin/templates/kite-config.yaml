@@ -1,0 +1,12 @@
+# Base of kite/.persist/kite-config.yaml -- bin/gen-configs appends one entry
+# to `clusters` per kubeconfig context, and fills in the superuser from
+# KITE_USERNAME and KITE_PASSWORD (.env).
+#
+# Edit this for anything else that does not come from the kubeconfig, e.g.
+# extra hand-written clusters.
+---
+superUser:
+  username: ""
+  password: ""
+
+clusters: []

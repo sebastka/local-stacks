@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+#
+# Port-forward every database bin/gen-configs could not reach directly, as
+# listed in .forwards.tsv, until interrupted. Each forward is restarted when it
+# drops (pod restarted, network blip).
+#
+# Containers reach these ports as FORWARD_HOST (host.docker.internal), so
+# CONTAINER_HOST_ADDRESS has to be an address that name leads to. The default,
+# 127.0.0.1, keeps the databases off the network; set it in .env to your
+# Docker host-gateway address if containers cannot reach the host's loopback.
+#
+# Usage: bin/forward
+
+set -euo pipefail
+
+cd "$(dirname "$(readlink -f "$0")")/.."
+
+# Settings from .env, over the environment: your shell may well export a
+# KUBECONFIG of its own, and this repo's is the one that counts here.
+if [[ -f .env ]]; then
+    set -a
+    # shellcheck source=/dev/null
+    . ./.env
+    set +a
+fi
+CONTAINER_HOST_ADDRESS=${CONTAINER_HOST_ADDRESS:-127.0.0.1}
+FORWARDS=.forwards.tsv
+
+[[ -s $FORWARDS ]] || { echo "nothing to forward: no $FORWARDS, run bin/gen-configs" >&2; exit 1; }
+
+# forward <context> <namespace> <service> <local port> <remote port>
+forward()
+{
+    local name="$1 $2/$3"
+    while :; do
+        echo "[$name] $CONTAINER_HOST_ADDRESS:$4 -> $5"
+        kubectl --context "$1" -n "$2" \
+            port-forward --address "$CONTAINER_HOST_ADDRESS" "svc/$3" "$4:$5" 2>&1 |
+            sed -u "s|^|[$name] |" || true
+        sleep 2
+    done
+}
+
+# Take every forward down with us.
+trap 'trap - EXIT INT TERM; kill 0' EXIT INT TERM
+
+while IFS=$'\t' read -r ctx ns svc lport rport _; do
+    [[ $ctx == \#* || -z $ctx ]] && continue
+    forward "$ctx" "$ns" "$svc" "$lport" "$rport" &
+done <"$FORWARDS"
+
+wait

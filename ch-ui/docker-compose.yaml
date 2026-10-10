@@ -1,10 +1,12 @@
+# User: "default"
+# Password: empty
 ---
 services:
   chui:
     container_name: chui
     # Dockerfile: https://github.com/caioricciuti/ch-ui/blob/main/Dockerfile
     image: ghcr.io/caioricciuti/ch-ui:latest
-    # user: 1000:1000
+    user: 100:101
     env_file: [.env]
     ports: [3488:3488/tcp]
     restart: no

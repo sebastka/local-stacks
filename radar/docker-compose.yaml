@@ -4,9 +4,9 @@ services:
     container_name: radar
     # Dockerfile: https://github.com/skyhook-io/radar/blob/main/Dockerfile
     image: ghcr.io/skyhook-io/radar:latest
-    user: 1000:1000
+    user: 1000:0
     # env_file: [.env]
     # environment: {}
     ports: [9280:9280/tcp]
-    volumes: [./.kubeconfig.yaml:/.kube/config:ro, .persist:/.radar]
+    volumes: [../.kubeconfig.gen.yaml:/.kube/config:ro, .persist:/.radar]
     restart: no

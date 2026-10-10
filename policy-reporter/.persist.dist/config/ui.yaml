@@ -1,3 +1,7 @@
+# Kubernetes access from $KUBECONFIG instead of in-cluster: without any, the
+# UI drops every cluster below.
+local: true
+
 logging:
   api: false
   server: false

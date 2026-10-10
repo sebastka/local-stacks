@@ -4,7 +4,7 @@ services:
     container_name: kite
     # Dockerfile: https://github.com/kite-org/kite/blob/main/Dockerfile
     image: ghcr.io/kite-org/kite:latest
-    user: 1000:2000
+    user: 1000:0
     env_file: [kite.env, ./.persist/secrets.env]
     ports: [8080:8080/tcp]
     volumes: [./.persist/kite-config.yaml:/config/kite-config.yaml:ro, ./.persist/data:/data]

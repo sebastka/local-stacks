@@ -4,9 +4,9 @@ services:
     container_name: trivy-operator-dashboard
     # Dockerfile: https://github.com/raoulx24/trivy-operator-dashboard/blob/master/build/dockerfile
     image: ghcr.io/raoulx24/trivy-operator-dashboard:latest
-    user: 1000:1000
+    user: 1000:0  # gid 0: your own group under rootless Docker, see bin/gen-configs
     env_file: [trivy-operator-dashboard.env]
     # environment: {}
     ports: [8900:8900]
-    volumes: [./.kubeconfig.yaml:/kubeconfig/config:ro]
+    volumes: [../.kubeconfig.gen.yaml:/kubeconfig/config:ro]
     restart: no

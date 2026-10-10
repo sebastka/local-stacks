@@ -3,36 +3,36 @@ services:
   policy-reporter:
     container_name: policy-reporter
     # Dockerfile: https://github.com/kyverno/policy-reporter/blob/main/Dockerfile
-    image: ghcr.io/kyverno/policy-reporter:3.10.0
-    user: 1000:1000
+    image: ghcr.io/kyverno/policy-reporter:latest
+    user: 1000:0
     command: ["--port=8080", "--config=/app/config.yaml", "--dbfile=/sqlite/database.db", "--metrics-enabled=true", "--rest-enabled=true", "--profile=false", "--lease-name=policy-reporter", "--template-dir=/app/templates", "--kubeconfig=/kubeconfig"]
     env_file: [policy-reporter.env]
     # environment: {}
     # ports: []
     # extra_hosts: [host.docker.internal:host-gateway]  # if k8s API server is on the host
-    volumes: [./.persist/config/core.yaml:/app/config.yaml:ro, ./.persist/kubeconfig.yaml:/kubeconfig:ro, ./.persist/sqlite:/sqlite]
+    volumes: [./.persist/config/core.yaml:/app/config.yaml:ro, ../.kubeconfig.gen.yaml:/kubeconfig:ro, ./.persist/sqlite:/sqlite]
     restart: unless-stopped
 
   policy-reporter-kyverno-plugin:
     container_name: policy-reporter-kyverno-plugin
     depends_on: [policy-reporter]
-    image: ghcr.io/kyverno/policy-reporter/kyverno-plugin:0.7.1
-    user: 1000:1000
+    image: ghcr.io/kyverno/policy-reporter/kyverno-plugin:0.7.2@sha256:adc9d4c4601a24474084a900299e5e82ef3101536df2b6b22ea927c233b6176b
+    user: 1000:0
     command: ["run", "--config=/app/config.yaml", "--port=8080", "--local"]
     env_file: [policy-reporter.env]
     # environment: {}
     # ports: []
-    volumes: [./.persist/config/kyverno-plugin.yaml:/app/config.yaml:ro, ./.persist/kubeconfig.yaml:/kubeconfig:ro]
+    volumes: [./.persist/config/kyverno-plugin.yaml:/app/config.yaml:ro, ../.kubeconfig.gen.yaml:/kubeconfig:ro]
     restart: unless-stopped
 
   policy-reporter-ui:
     container_name: policy-reporter-ui
     depends_on: [policy-reporter, policy-reporter-kyverno-plugin]
-    image: ghcr.io/kyverno/policy-reporter-ui:latest
-    user: 1000:1000
+    image: ghcr.io/kyverno/policy-reporter-ui:2.9.0@sha256:2a109222a00ee5896626a73b0c71fa7aa412588189e0fd6b80016adf11fe3662
+    user: 1000:0
     command: ["run", "--config=/app/config.yaml", "--port=8080"]
     env_file: [policy-reporter.env]
-    # environment: {}
+    environment: [KUBECONFIG=/kubeconfig]
     ports: [8085:8080/tcp]
-    volumes: [./.persist/config/ui.yaml:/app/config.yaml:ro]
+    volumes: [./.persist/config/ui.yaml:/app/config.yaml:ro, ../.kubeconfig.gen.yaml:/kubeconfig:ro]
     restart: unless-stopped

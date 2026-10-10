@@ -1,0 +1,11 @@
+# Bumps the pinned image tags in every stack's docker-compose.yaml. Images on
+# `latest` are left alone: Dependabot only moves version tags.
+version: 2
+updates:
+  - package-ecosystem: docker-compose
+    directories: ["/*"]
+    schedule:
+      interval: weekly
+    groups:
+      images:
+        patterns: ["*"]

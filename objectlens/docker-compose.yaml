@@ -1,0 +1,12 @@
+---
+services:
+  objectlens:
+    container_name: objectlens
+    # Dockerfile: https://github.com/sebastka/objectlens/blob/master/Dockerfile
+    image: ghcr.io/sebastka/objectlens:latest
+    user: 1000:1000
+    env_file: [.env]
+    # environment:
+    ports: [8000:3000/tcp]
+    # volumes: []
+    restart: no
