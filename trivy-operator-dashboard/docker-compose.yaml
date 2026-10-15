@@ -7,6 +7,6 @@ services:
     user: 1000:0  # gid 0: your own group under rootless Docker, see bin/gen-configs
     env_file: [trivy-operator-dashboard.env]
     # environment: {}
-    ports: [8900:8900]
+    ports: [40090:8900]
     volumes: [../.kubeconfig.gen.yaml:/kubeconfig/config:ro]
     restart: no

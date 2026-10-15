@@ -7,6 +7,6 @@ services:
     user: 1000:0
     # env_file: [.env]
     # environment: {}
-    ports: [9280:9280/tcp]
+    ports: [40087:9280/tcp]
     volumes: [../.kubeconfig.gen.yaml:/.kube/config:ro, .persist:/.radar]
     restart: no

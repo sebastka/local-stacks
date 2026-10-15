@@ -33,6 +33,6 @@ services:
     command: ["run", "--config=/app/config.yaml", "--port=8080"]
     env_file: [policy-reporter.env]
     environment: [KUBECONFIG=/kubeconfig]
-    ports: [8085:8080/tcp]
+    ports: [40086:8080/tcp]
     volumes: [./.persist/config/ui.yaml:/app/config.yaml:ro, ../.kubeconfig.gen.yaml:/kubeconfig:ro]
     restart: unless-stopped

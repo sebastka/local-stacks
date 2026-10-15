@@ -9,6 +9,6 @@ services:
     user: 1000:1000
     # env_file: []
     environment: [SQLITE_DATABASE=/mnt/data/db.sqlite]
-    ports: [8081:8080/tcp]
+    ports: [40089:8080/tcp]
     volumes: [./data:/mnt/data:ro]
     restart: no

@@ -7,6 +7,6 @@ services:
     user: 1000:1000
     env_file: [.env]
     # environment:
-    ports: [8000:3000/tcp]
+    ports: [40083:3000/tcp]
     # volumes: []
     restart: no

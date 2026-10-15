@@ -8,6 +8,6 @@ services:
     image: ghcr.io/caioricciuti/ch-ui:latest
     user: 100:101
     env_file: [.env]
-    ports: [3488:3488/tcp]
+    ports: [400821:3488/tcp]
     restart: no
     extra_hosts: [host.docker.internal:host-gateway]

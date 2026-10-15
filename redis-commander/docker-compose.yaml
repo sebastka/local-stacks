@@ -7,6 +7,6 @@ services:
     user: redis:10000
     env_file: [.env]
     # environment: {}
-    ports: [8081:8081/tcp]
+    ports: [40088:8081/tcp]
     # volumes: []
     restart: no
