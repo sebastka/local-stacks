@@ -16,7 +16,7 @@ services:
   policy-reporter-kyverno-plugin:
     container_name: policy-reporter-kyverno-plugin
     depends_on: [policy-reporter]
-    image: ghcr.io/kyverno/policy-reporter/kyverno-plugin:0.7.2@sha256:adc9d4c4601a24474084a900299e5e82ef3101536df2b6b22ea927c233b6176b
+    image: ghcr.io/kyverno/policy-reporter/kyverno-plugin:0.7.3@sha256:777d2318ff194c666ce1cb1f881c0556d6dc2c1cda6b3990d5c1a42bdb64ae2e
     user: 1000:0
     command: ["run", "--config=/app/config.yaml", "--port=8080", "--local"]
     env_file: [policy-reporter.env]
@@ -28,7 +28,7 @@ services:
   policy-reporter-ui:
     container_name: policy-reporter-ui
     depends_on: [policy-reporter, policy-reporter-kyverno-plugin]
-    image: ghcr.io/kyverno/policy-reporter-ui:2.9.0@sha256:2a109222a00ee5896626a73b0c71fa7aa412588189e0fd6b80016adf11fe3662
+    image: ghcr.io/kyverno/policy-reporter-ui:2.9.1@sha256:642762427ef5bc941b22f51f6e7c5c8f116a0635132239d11fc89826edbd3eaf
     user: 1000:0
     command: ["run", "--config=/app/config.yaml", "--port=8080"]
     env_file: [policy-reporter.env]
